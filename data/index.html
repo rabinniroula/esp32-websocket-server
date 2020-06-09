@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title> Websocket | ESP32 </title>
+    <style>
+      canvas{
+        border-style: outset;
+        border-color: black;
+        border-width: 7px;
+      }
+    </style>
+  </head>
+  <body onload="javascript:init()">
+    <div>
+      <label for="pins">Oscilloscope attached on pin: </label>
+      <select id="pins" name="Pin">
+        <option value="A0">A0</option>
+        <option value="A1">A1</option>
+        <option value="A2">A2</option>
+        <option value="A3">A3</option>
+        <option value="A4">A4</option>
+      </select><br><br>
+    </div>
+    <canvas id="graph" width="600" height="300"></canvas>
+    <br>
+    <input type="button" name="Toggle" value="Toggle" id = "toggle">
+    <script type="text/javascript">
+
+      var canvas = document.getElementById("graph");
+      var ctx = canvas.getContext("2d");
+      var t = 0;
+      var pval = 0;
+
+      var pins = document.getElementById("pins");
+      var toggleBtn = document.getElementById("toggle");
+
+      var Socket;
+      function init() {
+        Socket = new WebSocket('ws://' + window.location.hostname + ':81/');
+        Socket.onmessage = (event) => {
+          console.log(event.data);
+          if (event.data[0] == 'g')  drawGraph(event.data.slice(1));
+        }
+      }
+
+      pins.addEventListener("change", (event) => {
+        Socket.send("@" + pins.value);
+      });
+
+      toggleBtn.addEventListener("click", () => {
+        Socket.send("!");
+      })
+
+
+
+      function drawGraph(point){
+        if (t < 600){
+          ctx.moveTo(t, 300 - pval);
+          t++;
+          ctx.lineTo(t, 300 - point);
+          pval = point;
+          ctx.stroke();
+        }
+        else {
+          t = 0;
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          // Restore the transform
+          ctx.restore();
+          ctx.beginPath();
+        }
+      }
+
+    </script>
+
+  </body>
+</html>

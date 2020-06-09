@@ -1,1 +1,1 @@
-ESP32 webserver with websocket functionality.
+ESP32 webserver with websocket functionality with SPIFFS.

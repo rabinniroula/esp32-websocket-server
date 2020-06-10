@@ -24,7 +24,9 @@
     </div>
     <canvas id="graph" width="600" height="300"></canvas>
     <br>
-    <input type="button" name="Toggle" value="Toggle" id = "toggle">
+
+    <input type = "button" value = "Play" id = "pp">
+    <input type="button" value="Toggle" id = "toggle">
     <script type="text/javascript">
 
       var canvas = document.getElementById("graph");
@@ -34,6 +36,7 @@
 
       var pins = document.getElementById("pins");
       var toggleBtn = document.getElementById("toggle");
+      var ppBtn = document.getElementById("pp");
 
       var Socket;
       function init() {
@@ -51,6 +54,16 @@
       toggleBtn.addEventListener("click", () => {
         Socket.send("!");
       })
+
+      ppBtn.addEventListener("click", () => {
+        Socket.send("p");
+        if (ppBtn.value == "Play"){
+          ppBtn.value = "Pause";
+        }
+        else {
+          ppBtn.value = "Play";
+        }
+      });
 
 
 

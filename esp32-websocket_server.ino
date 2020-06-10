@@ -12,6 +12,7 @@ char* password = "9823431669manisha";
 uint8_t ledPin = 2;
 bool sts = true;
 uint16_t adcPin = 34;
+bool paused = true;
 
 void setup()
 {
@@ -38,9 +39,11 @@ void loop()
 {
   webSocket.loop();
   server.handleClient();
-  uint16_t adcVal = analogRead(adcPin);
-  String toSend = "g" + String(adcVal);
-  webSocket.broadcastTXT(toSend);
+  if (paused == false){
+    uint16_t adcVal = analogRead(adcPin);
+    String toSend = "g" + String(adcVal);
+    webSocket.broadcastTXT(toSend);
+  }
 }
 
 void serveIndexFile()
@@ -56,10 +59,14 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
       digitalWrite(ledPin, sts);
       sts = !sts;
     }
+    else if (payload[0] == 'p'){
+      paused = !paused;
+    }
     else{
-      for(int i = 0; i < length; i++)
+      for(int i = 0; i < length; i++){
         Serial.print((char) payload[i]);
-      Serial.println();
+        Serial.println();
+      }
     }
   }
 }

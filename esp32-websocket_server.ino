@@ -11,7 +11,7 @@ char* password = "9823431669manisha";
 
 uint8_t ledPin = 2;
 bool sts = true;
-uint16_t adcPin = 34;
+uint16_t adcPin = 34; // default adc pin is 34
 bool paused = true;
 
 void setup()
@@ -61,6 +61,9 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
     }
     else if (payload[0] == 'p'){
       paused = !paused;
+    }
+    else if (payload[0] == '@'){
+      adcPin = (uint16_t) strtol((const char *) &payload[1], NULL, 10);
     }
     else{
       for(int i = 0; i < length; i++){

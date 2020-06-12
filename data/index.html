@@ -79,10 +79,12 @@
 
       function drawGraph(point){
         if (t < 600){
+          mappedPoint = map(point, 0, 4095, 0, canvas.height);
+          console.log(mappedPoint);
           ctx.moveTo(t, 300 - pval);
           t++;
-          ctx.lineTo(t, 300 - point);
-          pval = point;
+          ctx.lineTo(t, 300 - mappedPoint);
+          pval = mappedPoint;
           ctx.stroke();
         }
         else {
@@ -93,6 +95,10 @@
           ctx.restore();
           ctx.beginPath();
         }
+      }
+
+      function map(val, fromLow, fromHigh, toLow, toHigh){
+        return (val - fromLow)*(toHigh - toLow)/(fromHigh - fromLow) + toLow;
       }
 
     </script>

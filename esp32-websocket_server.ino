@@ -6,8 +6,8 @@
 WebServer server;
 WebSocketsServer webSocket = WebSocketsServer(81);
 
-char* ssid = "abcdefg";
-char* password = "9823431669manisha";
+char* ssid = "";
+char* password = "";
 
 uint8_t ledPin = 2;
 bool sts = true;
